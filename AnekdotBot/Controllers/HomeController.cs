@@ -14,7 +14,7 @@ namespace AnekdotBot.Controllers
         public IActionResult Test()
         {
             RzuJoke r=new RzuJoke();
-            string s = r.Get(Category.Anekdot18).Result;
+            string s = r.Get(Category.an18).Result;
 
             return Content(s);
         }

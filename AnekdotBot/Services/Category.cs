@@ -2,11 +2,11 @@
 {
     public enum Category
     {
-        Anekdot = 1,
-        Rasskaz = 2,
-        Stih = 3,
-        Aforizm = 4,
-        Anekdot18 = 11,
-        Tost = 6
+        an = 1,
+        ra = 2,
+        st = 3,
+        af = 4,
+        an18 = 11,
+        to = 6
     }
 }
