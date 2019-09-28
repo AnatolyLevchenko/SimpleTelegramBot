@@ -31,6 +31,7 @@ namespace AnekdotBot
 
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
+            services.AddSingleton<IJoke, RzuJoke>();
             services.Configure<BotConfiguration>(Configuration.GetSection("BotConfiguration"));
         }
 
@@ -40,9 +41,11 @@ namespace AnekdotBot
             app.UseHttpsRedirection();
           
             botService.Client.SetWebhookAsync(config["BotConfiguration:Host"]+"/api/update");
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute("Main", "{action}", new { controller = "Home" });
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using AnekdotBot.Services;
 using Microsoft.AspNetCore.Mvc;
-using AnekdotBot.Models;
 
 namespace AnekdotBot.Controllers
 {
@@ -15,6 +11,12 @@ namespace AnekdotBot.Controllers
             return Content("Hell33o");
         }
 
-       
+        public IActionResult Test()
+        {
+            RzuJoke r=new RzuJoke();
+            string s = r.Get(Category.Anekdot18).Result;
+
+            return Content(s);
+        }
     }
 }

@@ -11,11 +11,13 @@ namespace AnekdotBot.Services
     {
         private readonly IBotService _botService;
         private readonly ILogger<UpdateService> _logger;
+        private readonly IJoke _joke;
 
-        public UpdateService(IBotService botService, ILogger<UpdateService> logger)
+        public UpdateService(IBotService botService, ILogger<UpdateService> logger,IJoke joke)
         {
             _botService = botService;
             _logger = logger;
+            _joke = joke;
         }
 
         public async Task EchoAsync(Update update)
@@ -25,30 +27,36 @@ namespace AnekdotBot.Services
                 return;
             }
 
-            var message = update.Message;
+            var joke = await _joke.Get(Category.Anekdot18);
+            await _botService.Client.SendTextMessageAsync(update.Message.Chat.Id,joke);
 
-            _logger.LogInformation("Received Message from {0}", message.Chat.Id);
 
-            if (message.Type == MessageType.Text)
-            {
-                // Echo each Message
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, message.Text);
-            }
-            else if (message.Type == MessageType.Photo)
-            {
-                // Download Photo
-                var fileId = message.Photo.LastOrDefault()?.FileId;
-                var file = await _botService.Client.GetFileAsync(fileId);
+            //update.Type==
 
-                var filename = file.FileId + "." + file.FilePath.Split('.').Last();
+            //var message = update.Message;
 
-                using (var saveImageStream = System.IO.File.Open(filename, FileMode.Create))
-                {
-                    await _botService.Client.DownloadFileAsync(file.FilePath, saveImageStream);
-                }
+            //_logger.LogInformation("Received Message from {0}", message.Chat.Id);
 
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thx for the Pics");
-            }
+            //if (message.Type == MessageType.Text)
+            //{
+            //    // Echo each Message
+            //    await _botService.Client.SendTextMessageAsync(message.Chat.Id, message.Text);
+            //}
+            //else if (message.Type == MessageType.Photo)
+            //{
+            //    // Download Photo
+            //    var fileId = message.Photo.LastOrDefault()?.FileId;
+            //    var file = await _botService.Client.GetFileAsync(fileId);
+
+            //    var filename = file.FileId + "." + file.FilePath.Split('.').Last();
+
+            //    using (var saveImageStream = System.IO.File.Open(filename, FileMode.Create))
+            //    {
+            //        await _botService.Client.DownloadFileAsync(file.FilePath, saveImageStream);
+            //    }
+
+            //    await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thx for the Pics");
+ //       }
         }
     }
 }
